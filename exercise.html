@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+	<style>
+		p {
+			font-family: 標楷體;
+			font-weight: bold
+			font-size: 24;
+			color: #592017;
+		}
+		img {
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+	<title>範例</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script>
+	$(function(){
+		$.ajax({
+			url: "http://140.134.26.71:58080/web-prog/Hotels",
+			type: "GET",
+			datatype: "json",
+			success: function(data) {
+				var parser = JSON.parse(data);
+				var items = parser.Infos.Info;
+				var column = '';
+				var count = 0;
+				var line = 0;
+				for(var i=0;i<items.length;i++) {		
+					var name = items[i].Name;
+					var imgURL = items[i].Picture1;
+					var URL = items[i].Website;
+					column = column+'<td align="center"><p>'+(i+1)+'.'+name+'</p><a target="_blank" href="'+URL+'"><img class="img-circle" src="'+imgURL+'"></td>';
+					count++;
+					if(count==4) {	
+						if(line==4){
+							line = 0;
+						}
+						if(line==0){
+							$("#attractions").append('<tr class="success">'+column+'</tr>');
+						}
+						if(line==1){
+							$("#attractions").append('<tr class="danger">'+column+'</tr>');
+						}
+						if(line==2){
+							$("#attractions").append('<tr class="info">'+column+'</tr>');
+						}
+						if(line==3){
+							$("#attractions").append('<tr class="warning">'+column+'</tr>');
+						}
+						column = '';
+						count = 0;
+						line++;
+					}
+				}
+			},
+			error: function() {
+			}
+		});
+	});
+	</script>
+	</head>
+	<div class="container">
+	<body>
+		<table class="table table-bordered" id="attractions">
+		</table>
+	</body>
+	</div>
+</html>
